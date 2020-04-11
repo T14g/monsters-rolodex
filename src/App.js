@@ -8,7 +8,8 @@ class App extends React.Component {
     super();//permite usar o state, neste exemplo
 
     this.state = {
-      monsters : []
+      monsters : [],
+      searchField: ''
     }
   }
 
@@ -19,11 +20,25 @@ class App extends React.Component {
     .then(response => response.json())
     .then(users => this.setState({ monsters : users }))
   }
-
+  
   render(){
+    const { monsters, searchField } = this.state;
+
+    //Add to array if pass on the function test
+    const filteredMonsters = monsters.filter(monster => 
+      monster.name.toLowerCase().includes(searchField.toLowerCase())
+      );
+
     return ( 
-      <div className="App">
-        <CardList monsters={this.state.monsters} />
+      <div className='app'>
+        <input type='text' placeholder='Search monsters' 
+        onChange={
+          e => this.setState(
+            {searchField : e.target.value}, () =>{
+            console.log(this.state)
+            })
+          }/>
+        <CardList monsters={filteredMonsters} />
       </div>
     );
   }
